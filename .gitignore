@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Ignore a specific folder
+data/raw/
+data/processed/
+
+
+output/

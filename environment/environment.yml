@@ -1,0 +1,16 @@
+name: Transformer-Model
+channels:
+  - conda-forge
+  - defaults
+
+dependencies:
+  - python=3.13.12
+  - ipykernel
+  - numpy
+  - scipy
+  - matplotlib
+  - jupyterlab
+  - notebook
+  - pip
+  
+prefix: /Users/caozehuang/miniconda3/envs/Transformer-Model
