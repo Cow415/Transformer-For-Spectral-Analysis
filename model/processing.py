@@ -1,5 +1,6 @@
 """Module Provided Functions Used to Process Incoming Data"""
 # Imports
+import math
 import numpy as np
 
 # Read-in
@@ -58,7 +59,7 @@ def read_txt(file_path, with_head=False):
     except FileNotFoundError:
         print(f"Error: The file: {file_path} is not found.")
 
-    return np.array(data)
+    return np.array(data, dtype=float)
 
 # Normalizations
 def normalize(input_vector):
@@ -80,10 +81,13 @@ def normalize(input_vector):
         raise ValueError("Maximum amplitude is zero; cannot normalize.")
 
     # Perform element-wise division
-    normalized_amplitude = amplitude / max_i
+    normalized_amp = amplitude / max_i
 
-    # Reconstruct the pair if you need to retain spectra
-    input_vector[:, 1] = normalized_amplitude
+    # Reconstruct the pair with new, truncated spectra
+    input_vector[:, 1] = np.trunc(normalized_amp * 1000000) / 1000000
+
+    print(f"Intensity is normalized by {max_i}.")
+
     return
 
 # Patch and Positional by kernel size
@@ -125,4 +129,23 @@ def patch(structure, ker_size=100):
 
     return np.array(patch_struct)
 
-# Phase Location
+# Phrase Location
+def phrase_locate(phrased_struct):
+    """
+    Identify the spectra window of each patch
+
+    Parameters:
+    file_path (str): Path to the target text file.
+    ker_size (int): desired kernel size
+    
+    Returns:
+    numpy.ndarray: New vector pair indexed with the start and end of each patch on the spectrum
+    """
+    struct = []
+    i = 0
+    for i in range(phrased_struct.shape[0]):
+        start_pos = np.min(phrased_struct[i, :, 0 ])
+        end_pos = np.max(phrased_struct[i, :, 0 ])
+        struct.append([start_pos, end_pos])
+        
+    return np.array(struct)
