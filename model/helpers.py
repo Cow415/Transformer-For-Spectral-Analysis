@@ -6,12 +6,12 @@ from scipy.sparse.linalg import spsolve
 import torch
 import torch.nn as nn
 
-# Corrections ==========================
-import numpy as np
+
 from scipy import sparse
 from scipy.sparse.linalg import spsolve
+from scipy.signal import savgol_filter
 
-
+# Corrections ==========================
 # !!! This is not revised !!!
 def stabilize_raman_scipy(wavenumber_vector, intensity_vector, lam=1e6, p=0.01, max_iter=10):
     """
@@ -53,6 +53,32 @@ def stabilize_raman_scipy(wavenumber_vector, intensity_vector, lam=1e6, p=0.01, 
     # Subtract baseline to stabilize intensities at zero
     corrected_intensity = y - z
     return corrected_intensity
+
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import savgol_filter
+
+def smooth_signal(data, window=11, order=2, show_plot=False, x_axis=None):
+    """
+    Smooths 1D data using a Savitzky-Golay filter.
+    
+    Parameters:
+    - data: 1D array-like data to smooth.
+    - window: Odd integer for sliding window size (default: 11).
+    - order: Polynomial order, must be < window (default: 2).
+    - show_plot: Boolean to instantly visualize results (default: False).
+    - x_axis: Optional 1D array for correct x-axis plotting metrics.
+    """
+    # Quick guard rails to prevent SciPy crashes
+    if window % 2 == 0:
+        window += 1  # Force window to be odd
+    if order >= window:
+        order = window - 1  # Force polynomial order to be smaller
+        
+    # Apply filter
+    smoothed = savgol_filter(data, window_length=window, polyorder=order)
+    
+    return smoothed
 
 # Noiser ==========================
 def gen_noise(clean):
