@@ -1,6 +1,6 @@
 # Transformer-For-Spectral-Analysis
 
-Build to autoencode and process Raman spectral data. 
+Autoencoder to process Raman spectral data. 
 
 
 Environment libraries:
@@ -9,3 +9,15 @@ Environment libraries:
     Numpy
     Pillow
     Scipy
+
+Transformer
+| - data/ 
+|   | - raw/
+|   | - processed/
+| - environment/
+| - model/ 
+|   | - model
+|   | - processing.py
+|   | - structure.py
+|   | - helper.py
+| - output/
