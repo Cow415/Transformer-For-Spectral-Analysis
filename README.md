@@ -1,6 +1,6 @@
 # Transformer-For-Spectral-Analysis
 
-Autoencoder to process Raman spectral data. 
+Autoencoder to process Raman spectral data and remove certain chemical signatures
 
 
 Environment libraries:
@@ -10,14 +10,14 @@ Environment libraries:
     Pillow
     Scipy
 
-Transformer
-| - data/ 
-|   | - raw/
-|   | - processed/
-| - environment/
-| - model/ 
-|   | - model
-|   | - processing.py
-|   | - structure.py
-|   | - helper.py
-| - output/
+Transformer/
+├── model/
+│   ├── helpers.py
+│   ├── processing.py
+│   ├── structure.py
+│   └── model.ipynb
+├── loss/
+│   └── softmax_ce.py
+├── environment/
+└── data/
+    ├── data_vis.ipynb

@@ -12,5 +12,3 @@ dependencies:
   - jupyterlab
   - notebook
   - pip
-  
-prefix: /Users/caozehuang/miniconda3/envs/Transformer-Model
