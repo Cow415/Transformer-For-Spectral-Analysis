@@ -211,4 +211,3 @@ def read_txt_bulk(list_path, paths_wd, with_head=False, inten_col_idx=1):
     data_set = np.array(data_set, dtype=float)
     print(f"Number of dataset: {data_set.shape[0] - 1}")
     return data_set
-

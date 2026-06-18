@@ -6,7 +6,6 @@ from scipy.sparse.linalg import spsolve
 import torch
 import torch.nn as nn
 
-
 from scipy import sparse
 from scipy.sparse.linalg import spsolve
 from scipy.signal import savgol_filter
@@ -58,7 +57,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.signal import savgol_filter
 
-def smooth_signal(data, window=11, order=2, show_plot=False, x_axis=None):
+def smooth_signal(data, window=11, order=2):
     """
     Smooths 1D data using a Savitzky-Golay filter.
     
@@ -66,8 +65,6 @@ def smooth_signal(data, window=11, order=2, show_plot=False, x_axis=None):
     - data: 1D array-like data to smooth.
     - window: Odd integer for sliding window size (default: 11).
     - order: Polynomial order, must be < window (default: 2).
-    - show_plot: Boolean to instantly visualize results (default: False).
-    - x_axis: Optional 1D array for correct x-axis plotting metrics.
     """
     # Quick guard rails to prevent SciPy crashes
     if window % 2 == 0:
@@ -87,9 +84,18 @@ def gen_noise(clean):
     return noisy
 
 # Activation Functions ==========================
+def sigmoid():
+    return 
 
-
+def ReLu():
+    return
+def Soft_Max():
+    return 
 # Loss Functions ==========================
+def mse():
+    return
 
+def Energy_loss():
+    return
 
 # Backpropagation ==========================
