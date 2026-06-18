@@ -11,7 +11,7 @@ from scipy.sparse.linalg import spsolve
 from scipy.signal import savgol_filter
 
 # Corrections ==========================
-# !!! This is not revised !!!
+# !!! BASELINE STABLIZER AND THE SG FILTERS AREN'T TESTED !!!
 def stabilize_raman_scipy(wavenumber_vector, intensity_vector, lam=1e6, p=0.01, max_iter=10):
     """
     Stabilizes and corrects a single Raman spectrum baseline using native SciPy.
@@ -29,11 +29,10 @@ def stabilize_raman_scipy(wavenumber_vector, intensity_vector, lam=1e6, p=0.01, 
     L = len(y)
     
     # Construct the 2nd-order difference matrix (D) using sparse format
-    # This prevents memory explosion on long spectral lengths
     diagonals = [np.ones(L), -2 * np.ones(L), np.ones(L)]
     D = sparse.spdiags(diagonals, [0, -1, -2], L, L-2)
     
-    # Pre-calculate penalty matrix: lam * (D * D^T)
+    # Clculate penalty matrix: lam * (D * D^T)
     DD_t = lam * D.dot(D.transpose())
     
     # Initialize baseline weights uniformly
@@ -52,10 +51,6 @@ def stabilize_raman_scipy(wavenumber_vector, intensity_vector, lam=1e6, p=0.01, 
     # Subtract baseline to stabilize intensities at zero
     corrected_intensity = y - z
     return corrected_intensity
-
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy.signal import savgol_filter
 
 def smooth_signal(data, window=11, order=2):
     """
@@ -83,19 +78,67 @@ def gen_noise(clean):
     noisy = clean + noise
     return noisy
 
+
+
 # Activation Functions ==========================
-def sigmoid():
-    return 
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
 
-def ReLu():
-    return
-def Soft_Max():
-    return 
+def ReLu(x):
+    return max(0, x)
+
+def Soft_Max(x):
+    e_x = np.exp(x - np.max(x)) # Subtract max for numerical stability
+    return e_x / e_x.sum(axis=0)
+
+def Leaky_ReLu(x, alpha=0.01):
+    return x if x > 0 else alpha * x
+
 # Loss Functions ==========================
-def mse():
-    return
+def mse(sample, target):
+    """
+    Computes the Mean Squared Error (MSE) between two Raman spectra processed spectra against a reference library.
+    """
+    sample_arr = np.asarray(sample)
+    target_arr = np.asarray(target)
+    return np.mean((sample_arr - target_arr) ** 2)
 
-def Energy_loss():
-    return
+def mae(sample, target):
+    """
+    Computes the Mean Absolute Error (MAE) between two Raman spectra.
+    """
+    sample_arr = np.asarray(sample)
+    target_arr = np.asarray(target)
+    return np.mean(np.abs(sample_arr - target_arr))
+  
+def Energy_loss(orig, processed):
+    """
+    Calculates the residual energy loss between an original (raw) spectrum and a processed spectrum. 
+    It measures the total signal power lost during preprocessing relative to the original signal power.
+    """
+    orig_arr = np.asarray(orig)
+    processed_arr = np.asarray(processed)
+    
+    residual_energy = np.sum((orig_arr - processed_arr) ** 2)
+    orig_energy = np.sum(orig_arr ** 2)
+    
+    # Avoid division by zero
+    if orig_energy == 0:
+        return 0.0
+        
+    return residual_energy / orig_energy
 
 # Backpropagation ==========================
+# TODO
+def compute_grad():
+
+    return
+
+def ADAM():
+
+    return
+
+def descend():
+
+    return
+
