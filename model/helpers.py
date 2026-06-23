@@ -73,12 +73,30 @@ def smooth_signal(data, window=11, order=2):
     return smoothed
 
 # Noiser ==========================
-def gen_noise(clean):
-    noise = np.random.normal(0, 0.02*np.max(clean), clean.shape)
+def gen_gauss_noise(clean, mu=0, sigma=0.02):
+    noise = np.random.normal(mu, sigma*np.max(clean), clean.shape)
     noisy = clean + noise
     return noisy
 
+def add_white_noise(spectrum, target_snr_db):
+    # Convert input to a numpy array
+    clean_signal = np.array(spectrum)
+    
+    signal_power = np.mean(clean_signal ** 2) # Average power of the clean signal
+    # Convert target SNR from dB to a linear scale
+    snr_linear = 10 ** (target_snr_db / 10)
+    noise_power = signal_power / snr_linear     # Calculate the noise power to hit the target SNR
+    
+    # Calculate the standard deviation (sigma) of the noise
+    noise_sigma = np.sqrt(noise_power)
 
+    # Generate random Gaussian noise with the calculated standard deviation
+    noise = np.random.normal(loc=0.0, scale=noise_sigma, size=clean_signal.shape)
+    
+    # Add the noise to the original clean signal
+    noisy = clean_signal + noise
+
+    return noisy
 
 # Activation Functions ==========================
 def sigmoid(x):
@@ -103,6 +121,13 @@ def mse(sample, target):
     target_arr = np.asarray(target)
     return np.mean((sample_arr - target_arr) ** 2)
 
+def gradient_loss():
+    return
+
+def peak_region_loss():
+    return
+
+# Other Assessments ==========================
 def mae(sample, target):
     """
     Computes the Mean Absolute Error (MAE) between two Raman spectra.
@@ -110,23 +135,6 @@ def mae(sample, target):
     sample_arr = np.asarray(sample)
     target_arr = np.asarray(target)
     return np.mean(np.abs(sample_arr - target_arr))
-  
-def Energy_loss(orig, processed):
-    """
-    Calculates the residual energy loss between an original (raw) spectrum and a processed spectrum. 
-    It measures the total signal power lost during preprocessing relative to the original signal power.
-    """
-    orig_arr = np.asarray(orig)
-    processed_arr = np.asarray(processed)
-    
-    residual_energy = np.sum((orig_arr - processed_arr) ** 2)
-    orig_energy = np.sum(orig_arr ** 2)
-    
-    # Avoid division by zero
-    if orig_energy == 0:
-        return 0.0
-        
-    return residual_energy / orig_energy
 
 # Backpropagation ==========================
 # TODO

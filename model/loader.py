@@ -190,24 +190,30 @@ def read_txt_bulk(list_path, paths_wd, with_head=False, inten_col_idx=1):
 
     # Run down extract first set
     premiere = paths.pop(0)
-    print(f"Accessing: {premiere}")
+    print(f"Accessing Set[1]: {premiere}")
     data_set = read_txt(premiere, with_head)
-
+    
+    set_num = 2
     for path in paths: 
         spectra = []
+
         try:
-            print(f"Accessing: {path}")
+            print(f"Accessing Set[{set_num}]: {path}")
             with open(path, "r", encoding="utf-8") as file:
                 if with_head:
                     next(file, None)           # Skip header
                 for line in file:
                     text = line.strip().split()     # Split by whitespace
                     spectra.append(text[inten_col_idx])     # Read each row in that column
-            data_set = np.vstack([data_set, np.array(spectra, dtype=float)])        # Append the spectra data over
-        
+
+            try:
+                data_set = np.vstack([data_set, np.array(spectra, dtype=float)])        # Append the spectra data over
+            except ValueError: 
+                print(f"Error in set{set_num}: {path}")
         except FileNotFoundError:
             print(f"Error: The file: {path} is not found.")
-    
+        set_num = set_num + 1
+
     data_set = np.array(data_set, dtype=float)
     print(f"Number of dataset: {data_set.shape[0] - 1}")
     return data_set

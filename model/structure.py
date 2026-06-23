@@ -78,7 +78,7 @@ class Encoder(nn.Module):
         return self.net(x)
 
 # Class Decoder
-class Decoder(nn.Module):
+class Sig_Decoder(nn.Module):
 
     def __init__(self):
         super().__init__()
@@ -107,3 +107,33 @@ class Decoder(nn.Module):
 
     def forward(self,z):
         return self.net(z)
+    
+class BG_Decoder(nn.Module):
+
+    def __init__(self):
+        super().__init__()
+        
+        self.net = nn.Sequential(
+            nn.ConvTranspose1d(
+                64,32,
+                kernel_size=2,
+                stride=2
+            ),
+            nn.ReLU(),
+
+            nn.ConvTranspose1d(
+                32,16,
+                kernel_size=2,
+                stride=2
+            ),
+            nn.ReLU(),
+
+            nn.ConvTranspose1d(
+                16,1,
+                kernel_size=2,
+                stride=2
+            )
+        )
+
+    def forward(self,z):
+        return self.net(z)        
