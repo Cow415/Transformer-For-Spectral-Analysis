@@ -9,6 +9,9 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
+  - torch
+  - scikit-learn
+  - PyWavelets
   - jupyterlab
   - notebook
   - pip

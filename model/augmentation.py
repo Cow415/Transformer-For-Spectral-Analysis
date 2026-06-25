@@ -49,6 +49,7 @@ def add_fluorescence_background(shift, intensity, strength=0.5):
 
     return intensity + baseline
 
+# Random events
 def random_shift(shift, max_shift=5):
     """
     Randomly shift Raman peaks.
@@ -78,10 +79,11 @@ def random_peak_broadening(intensity):
     """
     Simulate broadened Raman peaks.
     """
-        # Calculate sigma
+    # Calculate sigma
     sigma = np.random.uniform(0.5, 2.5)
     return gaussian_filter1d(intensity, sigma)
 
+# ===
 def estimate_snr():
     pass
 

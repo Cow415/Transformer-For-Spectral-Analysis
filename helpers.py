@@ -45,30 +45,6 @@ def Soft_Max(x):
 def Leaky_ReLu(x, alpha=0.01):
     return x if x > 0 else alpha * x
 
-# Loss Functions ==========================
-def mse(sample, target):
-    """
-    Computes the Mean Squared Error (MSE) between two Raman spectra processed spectra against a reference library.
-    """
-    sample_arr = np.asarray(sample)
-    target_arr = np.asarray(target)
-    return np.mean((sample_arr - target_arr) ** 2)
-
-def gradient_loss():
-    return
-
-def peak_region_loss():
-    return
-
-# Other Assessments ==========================
-def mae(sample, target):
-    """
-    Computes the Mean Absolute Error (MAE) between two Raman spectra.
-    """
-    sample_arr = np.asarray(sample)
-    target_arr = np.asarray(target)
-    return np.mean(np.abs(sample_arr - target_arr))
-
 """Module Provided Functions Load Raw Data"""
 # Imports
 import os
@@ -324,30 +300,3 @@ class BG_Decoder(nn.Module):
 
     def forward(self,z):
         return self.net(z)        
-
-
-import numpy as np
-
-# Normalizations
-def normalize_vec(input_vector):
-    """
-    Reads a vector of values and normalized its amplitude out of 1
-    
-    Parameters:
-    input (vec): input vector variable
-    
-    Returns:
-    None
-    """
-    max_i = np.max(input_vector)
-        # Handle the divide-by-zero case to avoid errors
-    if max_i == 0:
-        raise ValueError("Maximum amplitude is zero; cannot normalize.")
-
-    # Perform division
-    normalized = input_vector / max_i
-    input_vector[:] = np.trunc(normalized * 1000000) / 1000000
-
-    print(f"Intensity is normalized by dividing {max_i}.")
-
-    return 

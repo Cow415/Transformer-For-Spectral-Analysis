@@ -4,14 +4,14 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
-def plot_spectrum():
+def plot_spectrum(spectrum):
     """TODO: Plot a single Raman spectrum."""
     # Graph
-    x = data[0, :]
-    y = data[1, :]
+    x = spectrum["shift"]
+    y = spectrum["intensity"]
 
     # Plot
-    plt.figure(figsize=(15, 6))
+    plt.figure(figsize=(12, 6))
     plt.plot(x, y)
 
     plt.yticks([])

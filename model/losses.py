@@ -1,44 +1,85 @@
 # losses.py
 # ==========================================================
+# Assume output has the shape of (# in batch, spectra_size)
+# 
 import numpy as np
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
+def mse_loss(prediction, target):
+    """ 
+    Compute mean squared reconstruction loss.
+    """
+    return F.mse_loss(prediction, target)
 
-def mse_loss():
-    """TODO: Compute mean squared reconstruction loss."""
-    pass
+def mae_loss(prediction, target):
+    """
+    Compute mean absolute reconstruction loss."""
+    return F.l1_loss (prediction, target)
 
-def mae_loss():
-    """TODO: Compute mean absolute reconstruction loss."""
-    pass
+def huber_loss(prediction, target, delta=1.0):
+    """
+    Compute Huber loss.
+    """
+    return F.huber_loss(prediction, target, delta=delta)
 
-def huber_loss():
-    """TODO: Compute Huber loss."""
-    pass
+# Raman Specified
+def gradient_loss(prediction, target):
+    """
+    Penalize gradient differences between spectra.
+    """
+    # Compute gradient for each
+    pred_grad = (prediction[..., 1:] - prediction[..., 1:])
+    target_grad = (target[..., 1:] - target[..., 1:])
+    return F.mse_loss(pred_grad, target_grad)
 
-def gradient_loss():
-    """TODO: Penalize gradient differences between spectra."""
-    pass
+def peak_loss(prediction, target, peak_mask):
+    """
+    Penalize errors around Raman peaks.
+    To make mask: peak_mask = ((shift >= __) & (shift <= __))
+    """
+    pred_peak = prediction[..., peak_mask]
+    target_peak = prediction[..., peak_mask]
+    return F.mse_loss(pred_peak, target_peak)
 
-def peak_loss():
-    """TODO: Penalize errors around Raman peaks."""
-    pass
+def cosine_loss(prediction, target):
+    """
+    Penalize spectral angle differences.
+    """
+    similarity = F.cosine_similarity(prediction, target, dim=-1)
+    return (1 - similarity.mean())
 
-def cosine_loss():
-    """TODO: Penalize spectral angle differences."""
-    pass
+def combined_loss(prediction, target, peak_mask=None):
+    """
+    Combine multiple loss functions.
+    """
+    # Weights can be tuned
+    loss = (0.6 * mse_loss(prediction, target)
+        + 0.2 * gradient_loss(prediction, target)
+        + 0.2 * cosine_loss(prediction, target))
+    if peak_mask is not None:
+        loss += (0.1 * peak_loss(prediction, target, peak_mask))
+    return loss
 
-def combined_loss():
-    """TODO: Combine multiple loss functions."""
-    pass
+# Regularizations
+def l1_regularization(model):
+    """
+    Compute L1 regularization.
+    """
+    reg = 0.0
+    for param in model.parameter():
+        reg += torch.sum(torch.abs(param))
+    return reg
 
-def l1_regularization():
-    """TODO: Compute L1 regularization."""
-    pass
-
-def l2_regularization():
+def l2_regularization(model):
     """TODO: Compute L2 regularization."""
-    pass
+    reg = 0.0 
+    for param in model.parameters():
+        reg += torch.sum(param**2)
+    return reg
 
+# Other
 def energy_loss(orig, processed):
     """
     Calculates the residual energy loss between an original (raw) spectrum and a processed spectrum. 
