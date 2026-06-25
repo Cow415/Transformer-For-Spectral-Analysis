@@ -1,8 +1,25 @@
 # visualization.py
 # ==========================================================
+import numpy as np
+from matplotlib import pyplot as plt
+
 
 def plot_spectrum():
     """TODO: Plot a single Raman spectrum."""
+    # Graph
+    x = data[0, :]
+    y = data[1, :]
+
+    # Plot
+    plt.figure(figsize=(15, 6))
+    plt.plot(x, y)
+
+    plt.yticks([])
+
+    plt.title("Raman Spectrum")
+    plt.xlabel("Raman Shift (cm$^{-1}$)")
+    plt.ylabel("Intensity (a.u.)")
+    plt.show()
     pass
 
 def plot_overlay():

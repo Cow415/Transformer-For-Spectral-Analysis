@@ -1,5 +1,10 @@
 # preprocessing.py
 # ==========================================================
+import numpy as np
+from scipy.interpolate import interp1d
+from scipy.signal import savgol_filter
+from scipy import sparse
+from scipy.sparse.linalg import spsolve
 
 def baseline_als():
     """TODO: Remove fluorescence using ALS baseline correction."""
