@@ -9,6 +9,8 @@ Function implementations are in .py and work is done in model.ipynb
   - ipykernel
   - numpy
   - scipy
+  - PyWavelets
+  - scikit-learn
   - matplotlib
   - jupyterlab
   - notebook
@@ -18,6 +20,7 @@ Function implementations are in .py and work is done in model.ipynb
     Transformer/
     ├── model/              
     │   ├── augmentation.py 
+    │   ├── dataset.py
     │   ├── loader.py       
     │   ├── preprocess.py   
     │   ├── augmentation.py 
@@ -26,9 +29,11 @@ Function implementations are in .py and work is done in model.ipynb
     │   ├── training.py     
     │   ├── metrics.py      
     │   ├── visualization.py
+    │   ├── pipeline.py
     │   ├── benchmark.py    
     │   ├── inference.py    
-    │   ├── utils.py        
+    │   ├── utils.py     
+    │   ├── data_process.ipynb
     │   └── model.ipynb     
     ├── environment/        
     └── data/               

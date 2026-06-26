@@ -9,7 +9,7 @@ from loader import *
 from dataset import *
 from preprocess import *
 from trainer import *
-from ref_structure import *
+from ref_architecture import *
 from benchmark import *
 from inference import *
 from utils import *
