@@ -1,9 +1,0 @@
-Baseline Correction
-       ↓
-Normalization
-       ↓
-1D Convolutional Autoencoder
-       ↓
-16–32 dimensional latent space
-       ↓
-Classifier or clustering model

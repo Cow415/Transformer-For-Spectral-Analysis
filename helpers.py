@@ -3,6 +3,7 @@ import numpy as np
 from scipy import sparse
 from scipy.sparse.linalg import spsolve
 
+import os
 import torch
 import torch.nn as nn
 
@@ -30,26 +31,6 @@ def add_white_noise(spectrum, target_snr_db):
     noisy = clean_signal + noise
 
     return noisy
-
-# Activation Functions ==========================
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
-
-def ReLu(x):
-    return max(0, x)
-
-def Soft_Max(x):
-    e_x = np.exp(x - np.max(x)) # Subtract max for numerical stability
-    return e_x / e_x.sum(axis=0)
-
-def Leaky_ReLu(x, alpha=0.01):
-    return x if x > 0 else alpha * x
-
-"""Module Provided Functions Load Raw Data"""
-# Imports
-import os
-import math
-import numpy as np
 
 # Read-in .txt files
 def read_txt(file_path, with_head=False):
